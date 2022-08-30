@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const router = require('./router.js')
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 const DB_URL = "mongodb+srv://nikko:MoKm3lxo6hjiSpEN@cluster0.8kzaexv.mongodb.net/?retryWrites=true&w=majority"
 const app = express()
 app.use(express.json())
