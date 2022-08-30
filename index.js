@@ -1,5 +1,7 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const cors = require('cors')
+const morgan = require('morgan')
 const router = require('./router.js')
 
 const PORT = process.env.PORT || 5000;
@@ -7,7 +9,8 @@ const DB_URL = "mongodb+srv://nikko:MoKm3lxo6hjiSpEN@cluster0.8kzaexv.mongodb.ne
 const app = express()
 app.use(express.json())
 app.use('/api', router)
-
+app.use(morgan())
+app.use(cors())
 app.post('/', )
 async function startApp() {
     try {
