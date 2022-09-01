@@ -3,12 +3,12 @@ const Post = require('./post.js')
 class PostController {
     async create(req, res) {
         try {
-            const {key, collect, reward,activites,rating} = req.body
+            const {key, name, reward,contract, activites,rating} = req.body
             if (key != "qwerty") {
                 res.status(400).json({message: 'Invalid password'})
                 return
             }
-            const post = await Post.create({key, collect, reward,activites,rating})
+            const post = await Post.create({key, name, reward,contract, activites,rating})
             console.log(req.body);
             res.json(post)
         } catch (e) {
