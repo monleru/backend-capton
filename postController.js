@@ -1,14 +1,31 @@
 const Post = require('./post.js')
+const axios = require('axios');
 
 class PostController {
     async create(req, res) {
         try {
-            const {key, name, reward,contract, activites,rating} = req.body
+            const {key, name, reward, contract, activites, rating, logo, about, start, end, links, eventLink, rewardsPool, participants, aboutDiv, img, details} = req.body
             if (key != "qwerty") {
                 res.status(400).json({message: 'Invalid password'})
                 return
             }
-            const post = await Post.create({key, name, reward,contract, activites,rating})
+            const post = await Post.create({key,
+                name,
+                reward,
+                contract,
+                activites,
+                rating,
+                logo,
+                about,
+                start,
+                end,
+                links,
+                eventLink,
+                rewardsPool,
+                participants,
+                aboutDiv,
+                img,
+                details})
             console.log(req.body);
             res.json(post)
         } catch (e) {
@@ -58,6 +75,31 @@ class PostController {
         } catch (e) {
             res.status(500).json(e)
         }
+    }
+    async data(req, res) {
+        let response = null;
+        new Promise(async (resolve, reject) => {
+            try {
+                response = await axios.get(' https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=11419', {
+                    headers: {
+                        'X-CMC_PRO_API_KEY': 'b85bd06c-19cd-486f-a304-f1ba22178f9c',
+                    },
+                });
+            } catch(ex) {
+                response = null;
+                // error
+                return res.json(ex)
+                console.log(ex);
+                // reject(ex);
+            }
+            if (response) {
+                // success
+                const json = response.data;
+                res.status(500).json(json)
+                console.log(json);
+                // resolve(json);
+            }
+        });
     }
 }
 
