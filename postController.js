@@ -80,7 +80,8 @@ class PostController {
         let response = null;
         new Promise(async (resolve, reject) => {
             try {
-                response = await axios.get(' https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=11419', {
+                const {currency} = req.params;
+                response = await axios.get(` https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=11419&convert=${currency}`, {
                     headers: {
                         'X-CMC_PRO_API_KEY': 'b85bd06c-19cd-486f-a304-f1ba22178f9c',
                     },
