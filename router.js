@@ -9,5 +9,6 @@ router.get('/data/:currency', postController.data)
 router.get('/posts/:id',postController.getOne )
 router.put('/posts', postController.update )
 router.delete('/posts/:id',postController.delete )
+router.get('/collections',postController.collections)
 
 module.exports = router;

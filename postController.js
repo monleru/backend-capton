@@ -35,6 +35,7 @@ class PostController {
     async getAll(req, res) {
         try {
             const posts = await Post.find();
+            console.log(req.query)
             return res.json(posts);
         } catch (e) {
             res.status(500).json(e)
@@ -78,7 +79,6 @@ class PostController {
     }
     async data(req, res) {
         let response = null;
-        new Promise(async (resolve, reject) => {
             try {
                 const {currency} = req.params;
                 response = await axios.get(` https://pro-api.coinmarketcap.com/v2/cryptocurrency/quotes/latest?id=11419&convert=${currency}`, {
@@ -90,17 +90,25 @@ class PostController {
                 response = null;
                 // error
                 return res.json(ex)
-                console.log(ex);
-                // reject(ex);
             }
             if (response) {
                 // success
                 const json = response.data;
-                res.status(500).json(json)
-                console.log(json);
-                // resolve(json);
+                return res.json(json)
             }
-        });
+    }
+    async collections(req, res) {
+        let response = null;
+        const params = req.query;
+        try {
+            response = await axios.post('https://api.getgems.io/graphql',{
+                "operationName":"mainPageTopCollection","variables":{"kind":"day","count":Number(params.num)},"query":"query mainPageTopCollection($kind: MPTopKind!, $count: Int!, $cursor: String) {\n  mainPageTopCollection(kind: $kind, first: $count, after: $cursor) {\n    cursor\n    items {\n      place\n      tonValue\n      currencyValue(currency: usd)\n      diffPercent\n      floorPrice\n      currencyFloorPrice(currency: usd)\n      collection {\n        address\n        name\n        isVerified\n        image {\n          image {\n            sized(width: 200, height: 200, format: \"collection-avatar\")\n            __typename\n          }\n          __typename\n        }\n        approximateHoldersCount\n        approximateItemsCount\n        __typename\n      }\n      __typename\n    }\n    __typename\n  }\n}"
+            })
+            console.log(params)
+            return res.json(response.data)
+        } catch (e) {
+            res.status(500).json(e)
+        }
     }
 }
 
