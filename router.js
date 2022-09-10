@@ -10,5 +10,6 @@ router.get('/posts/:id',postController.getOne )
 router.put('/posts', postController.update )
 router.delete('/posts/:id',postController.delete )
 router.get('/collections',postController.collections)
+router.get('/search',postController.search)
 
 module.exports = router;

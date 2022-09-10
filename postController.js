@@ -110,6 +110,19 @@ class PostController {
             res.status(500).json(e)
         }
     }
+    async search(req, res) {
+        let response = null;
+        const params = req.query;
+        try {
+            response = await axios.post('https://api.getgems.io/graphql',{
+                "operationName":"commonSearch","variables":{"query":`{\"$and\":[{\"search\":\"${params.name}\"},{\"isBlocked\":false}]}`,"count":30,"searchCollection":true,"searchNft":false},"query":"query commonSearch($searchNft: Boolean!, $searchCollection: Boolean!, $count: Int!, $cursor: String, $query: String, $sort: String) {\n  nfts: alphaNftItemSearch(\n    first: $count\n    after: $cursor\n    query: $query\n    sort: $sort\n  ) @include(if: $searchNft) {\n    edges {\n      node {\n        address\n        name\n        previewImage: content {\n          ... on NftContentImage {\n            image {\n              baseUrl\n              sized(width: 200, height: 200)\n              __typename\n            }\n            __typename\n          }\n          __typename\n        }\n        sale {\n          ... on NftSaleFixPrice {\n            fullPrice\n            __typename\n          }\n          ... on NftSaleFixPriceDisintar {\n            fullPrice\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      cursor\n      __typename\n    }\n    info {\n      hasNextPage\n      __typename\n    }\n    __typename\n  }\n  collections: alphaNftCollectionSearch(\n    first: $count\n    after: $cursor\n    query: $query\n    sort: $sort\n  ) @include(if: $searchCollection) {\n    edges {\n      node {\n        address\n        name\n        isVerified\n        previewImage: image {\n          image {\n            baseUrl\n            sized(width: 200, height: 200)\n            __typename\n          }\n          __typename\n        }\n        __typename\n      }\n      cursor\n      __typename\n    }\n    info {\n      hasNextPage\n      __typename\n    }\n    __typename\n  }\n}"
+            })
+            console.log(params)
+            return res.json(response.data)
+        } catch (e) {
+            res.status(500).json(e)
+        }
+    }
 }
 
 module.exports = new PostController();
