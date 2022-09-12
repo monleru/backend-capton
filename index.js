@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const morgan = require('morgan')
 const router = require('./router.js')
+const crypto = require('crypto');
 
 const PORT = process.env.PORT || 5000;
 const DB_URL = "mongodb+srv://nikko:MoKm3lxo6hjiSpEN@cluster0.8kzaexv.mongodb.net/?retryWrites=true&w=majority"
@@ -22,4 +23,5 @@ async function startApp() {
         console.log(e)
     }
 }
+
 startApp()

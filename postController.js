@@ -1,5 +1,6 @@
 const Post = require('./post.js')
 const axios = require('axios');
+const crypto = require("crypto");
 
 class PostController {
     async create(req, res) {
@@ -26,7 +27,6 @@ class PostController {
                 aboutDiv,
                 img,
                 details})
-            console.log(req.body);
             res.json(post)
         } catch (e) {
             res.status(500).json(e)
@@ -119,6 +119,31 @@ class PostController {
             })
             console.log(params)
             return res.json(response.data)
+        } catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async login(req, res) {
+        try {
+            const {
+                login, password
+            } = req.body
+            if ( login != "admin" && password != "M59mh#T6H0ir") {
+                res.status(400).json({message: 'Invalid password'})
+                return
+            }
+            res.json(crypto.createHash('md5').update("M59mh#T6H0ir").digest('hex'))
+        } catch (e) {
+            res.status(500).json(e)
+        }
+    }
+    async getToken(req,res) {
+        try {
+            const { token } = req.body
+            if ( token != crypto.createHash('md5').update("M59mh#T6H0ir").digest('hex')) {
+                res.status(400).json({message: 'Invalid token'})
+            }
+            res.json(true)
         } catch (e) {
             res.status(500).json(e)
         }
